@@ -3,6 +3,7 @@ package com.ircnet.library.service;
 import com.ircnet.library.common.Client;
 import com.ircnet.library.common.IRCTask;
 import com.ircnet.library.common.Parser;
+import com.ircnet.library.common.User;
 import com.ircnet.library.common.configuration.ConfigurationModel;
 import com.ircnet.library.common.connection.IRCConnection;
 import com.ircnet.library.common.event.EventBus;
@@ -39,6 +40,10 @@ public class IRCService extends IRCTask implements Client {
         EventBus.registerEventListener(0, new YouAreServiceEventListener());
         EventBus.registerEventListener(0, new EndOfBurstEventListener());
         EventBus.registerEventListener(0, new ServSetEventListener());
+    }
+
+    public void notice(User user, String format, Object... args) {
+        notice(user.getNick(), format, args);
     }
 
     public void notice(String nick, String format, Object... args) {
