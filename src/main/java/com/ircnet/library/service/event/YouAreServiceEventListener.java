@@ -1,5 +1,6 @@
 package com.ircnet.library.service.event;
 
+import com.ircnet.library.common.connection.ConnectionStatus;
 import com.ircnet.library.common.event.AbstractEventListener;
 import com.ircnet.library.service.IRCService;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ public class YouAreServiceEventListener extends AbstractEventListener<YouAreServ
     private static final Logger LOGGER = LoggerFactory.getLogger(YouAreServiceEventListener.class);
 
     protected void onEvent(YouAreServiceEvent event) {
+        event.getIRCConnection().setConnectionStatus(ConnectionStatus.REGISTERED);
         LOGGER.trace("Service connected as {}", event.getServiceName());
 
         IRCService ircService = event.getIRCService();
