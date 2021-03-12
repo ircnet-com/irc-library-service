@@ -5,27 +5,33 @@ import com.ircnet.library.common.Parser;
 import com.ircnet.library.common.User;
 import com.ircnet.library.common.Util;
 import com.ircnet.library.common.connection.ConnectionStatus;
+import com.ircnet.library.common.connection.IRCConnectionService;
 import com.ircnet.library.common.event.ConnectionStatusChangedEvent;
 import com.ircnet.library.common.event.EventBus;
-import com.ircnet.library.service.IRCService;
 import com.ircnet.library.service.connection.IRCServiceConnection;
 import com.ircnet.library.service.event.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ParserImpl implements Parser<IRCServiceConnection> {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
 
-    private IRCService ircService;
+    @Autowired
+    private EventBus eventBus;
+
+    @Autowired
+    private IRCConnectionService ircConnectionService;
+
     private List<ParserMapping> parserMappingList;
 
-    public ParserImpl(IRCService ircService) {
-        this.ircService = ircService;
-
+    public ParserImpl() {
         parserMappingList = new ArrayList<>();
         parserMappingList.add(new ParserMapping("PING", 0, 2, (arg1, arg2) -> parsePing(arg1, arg2)));
         parserMappingList.add(new ParserMapping("NICK", 0, 8, (arg1, arg2) -> parseNick(arg1, arg2)));
@@ -55,7 +61,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
     }
 
     private void parsePing(IRCServiceConnection ircConnection, String[] parts) {
-        ircConnection.send("PONG %s", parts[1]);
+        ircConnectionService.send(ircConnection, "PONG %s", parts[1]);
     }
 
     private void parseYouAreService(IRCServiceConnection ircConnection, String[] parts) {
@@ -67,8 +73,8 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
         */
         String lastWord = parts[3].substring(parts[3].lastIndexOf(" ") + 1);
 
-        EventBus.publishEvent(new YouAreServiceEvent(ircService, ircConnection, lastWord));
-        EventBus.publishEvent(new ConnectionStatusChangedEvent(ircConnection, ircConnection.getConnectionStatus(), ConnectionStatus.REGISTERED));
+        eventBus.publishEvent(new YouAreServiceEvent(ircConnection, lastWord));
+        eventBus.publishEvent(new ConnectionStatusChangedEvent(ircConnection, ircConnection.getConnectionStatus(), ConnectionStatus.REGISTERED));
     }
 
     private void parseServer(IRCServiceConnection ircConnection, String[] parts) {
@@ -80,7 +86,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[4] = SID of the new server
             parts[5] = service info (starting with ':')
         */
-        EventBus.publishEvent(new ServerEvent(ircService, ircConnection, parts[2], Integer.parseInt(parts[3]), parts[4], Util.removeLeadingColon(parts[5])));
+        eventBus.publishEvent(new ServerEvent(ircConnection, parts[2], Integer.parseInt(parts[3]), parts[4], Util.removeLeadingColon(parts[5])));
     }
 
     private void parseNick(IRCServiceConnection ircConnection, String[] parts) {
@@ -94,7 +100,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[6] = user modes (starting with '+')
             parts[7] = real name (starting with ':')
         */
-        EventBus.publishEvent(new NickEvent(ircService, ircConnection, parts[1], parts[3], parts[4], Util.removeLeadingColon(parts[7]), parts[5], Integer.parseInt(parts[2]), parts[6]));
+        eventBus.publishEvent(new NickEvent(ircConnection, parts[1], parts[3], parts[4], Util.removeLeadingColon(parts[7]), parts[5], Integer.parseInt(parts[2]), parts[6]));
     }
 
     private void parseChannel(IRCServiceConnection ircConnection, String[] parts) {
@@ -103,7 +109,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[1] = channel name
             parts[2] = user count
         */
-        EventBus.publishEvent(new ChannelEvent(ircService, ircConnection, parts[1], Integer.parseInt(parts[2])));
+        eventBus.publishEvent(new ChannelEvent(ircConnection, parts[1], Integer.parseInt(parts[2])));
     }
 
     private void parseTopic(IRCServiceConnection ircConnection, String[] parts) {
@@ -112,7 +118,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[1] = channel name
             parts[2] = topic (starting with ':')
         */
-        EventBus.publishEvent(new TopicEvent(ircService, ircConnection, parts[1], Util.removeLeadingColon(parts[2])));
+        eventBus.publishEvent(new TopicEvent(ircConnection, parts[1], Util.removeLeadingColon(parts[2])));
     }
 
     private void parseTopicChange(IRCServiceConnection ircConnection, String[] parts) {
@@ -122,7 +128,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[2] = channel name
             parts[3] = topic (starting with ':')
         */
-        EventBus.publishEvent(new TopicEvent(ircService, ircConnection, parts[2], Util.removeLeadingColon(parts[3]), Util.removeLeadingColon(parts[0])));
+        eventBus.publishEvent(new TopicEvent(ircConnection, parts[2], Util.removeLeadingColon(parts[3]), Util.removeLeadingColon(parts[0])));
     }
 
     private void parseChannelMode(IRCServiceConnection ircConnection, String[] parts) {
@@ -131,7 +137,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[1] = channel name
             parts[2] = modes
         */
-        EventBus.publishEvent(new ChannelModeEvent(ircService, ircConnection, parts[1], parts[2]));
+        eventBus.publishEvent(new ChannelModeEvent(ircConnection, parts[1], parts[2]));
     }
 
     private void parseUserMode(IRCServiceConnection ircConnection, String[] parts) {
@@ -141,7 +147,7 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[2] = my service name
             parts[3] = modes
        */
-        EventBus.publishEvent(new UserModeEvent(ircService, ircConnection, parts[2], parts[3]));
+        eventBus.publishEvent(new UserModeEvent(ircConnection, parts[2], parts[3]));
     }
 
     private void parseSQuery(IRCServiceConnection ircConnection, String[] parts) {
@@ -151,12 +157,12 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[2] = my service name
             parts[3] = message
         */
-        EventBus.publishEvent(new SQueryEvent(ircService, ircConnection, new User(parts[0]), Util.removeLeadingColon(parts[3])));
+        eventBus.publishEvent(new SQueryEvent(ircConnection, new User(parts[0]), Util.removeLeadingColon(parts[3])));
     }
 
     private void parseEndOfBurst(IRCServiceConnection ircConnection) {
         // parts[0] = "EOB"
-        EventBus.publishEvent(new EndOfBurstEvent(ircService, ircConnection));
+        eventBus.publishEvent(new EndOfBurstEvent(ircConnection));
     }
 
     private void parseServSet(IRCServiceConnection ircConnection, String[] parts) {
@@ -166,6 +172,6 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
             parts[2] = my service name
             parts[3] = The accepted SERVSET as integer
         */
-        EventBus.publishEvent(new ServSetEvent(ircService, ircConnection, new User(parts[0]), Integer.parseInt(Util.removeLeadingColon(parts[3]))));
+        eventBus.publishEvent(new ServSetEvent(ircConnection, new User(parts[0]), Integer.parseInt(Util.removeLeadingColon(parts[3]))));
     }
 }

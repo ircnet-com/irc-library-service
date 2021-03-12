@@ -1,6 +1,5 @@
 package com.ircnet.library.service.event;
 
-import com.ircnet.library.service.IRCService;
 import com.ircnet.library.service.connection.IRCServiceConnection;
 
 public class NickEvent extends AbstractServiceEvent {
@@ -13,8 +12,7 @@ public class NickEvent extends AbstractServiceEvent {
     private int hopCount;
     private String userModes;
 
-    public NickEvent(IRCService ircService, IRCServiceConnection ircConnection, String nick, String user, String host, String realName, String serverName, int hopCount, String userModes) {
-        this.ircService = ircService;
+    public NickEvent(IRCServiceConnection ircConnection, String nick, String user, String host, String realName, String serverName, int hopCount, String userModes) {
         this.ircConnection = ircConnection;
         this.nick = nick;
         this.user = user;
