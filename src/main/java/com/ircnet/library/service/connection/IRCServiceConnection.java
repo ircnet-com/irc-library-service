@@ -1,17 +1,23 @@
 package com.ircnet.library.service.connection;
 
 import com.ircnet.library.common.IRCTask;
-import com.ircnet.library.common.configuration.ConfigurationModel;
 import com.ircnet.library.common.connection.IRCConnection;
+import com.ircnet.library.service.ServiceConfigurationModel;
 
 import java.util.Date;
 
 public class IRCServiceConnection extends IRCConnection {
+    private ServiceConfigurationModel serviceConfiguration;
     private boolean burst;
     private Date burstStart;
 
-    public IRCServiceConnection(IRCTask ircTask, ConfigurationModel configurationModel) {
-        super(ircTask, configurationModel);
+    public IRCServiceConnection(IRCTask ircTask, ServiceConfigurationModel configuration) {
+        super(ircTask, configuration);
+        this.serviceConfiguration = configuration;
+    }
+
+    public ServiceConfigurationModel getServiceConfiguration() {
+        return serviceConfiguration;
     }
 
     public boolean isBurst() {

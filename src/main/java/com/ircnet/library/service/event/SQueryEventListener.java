@@ -3,7 +3,9 @@ package com.ircnet.library.service.event;
 import com.ircnet.library.common.event.AbstractEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component("defaultSQueryEventListener")
 public class SQueryEventListener extends AbstractEventListener<SQueryEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SQueryEventListener.class);
 

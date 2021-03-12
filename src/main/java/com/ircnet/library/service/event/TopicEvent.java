@@ -1,6 +1,5 @@
 package com.ircnet.library.service.event;
 
-import com.ircnet.library.service.IRCService;
 import com.ircnet.library.service.connection.IRCServiceConnection;
 
 public class TopicEvent extends AbstractServiceEvent {
@@ -8,15 +7,14 @@ public class TopicEvent extends AbstractServiceEvent {
     private String topic;
     private String from;
 
-    public TopicEvent(IRCService ircService, IRCServiceConnection ircConnection, String channelName, String topic) {
-        this.ircService = ircService;
+    public TopicEvent(IRCServiceConnection ircConnection, String channelName, String topic) {
         this.ircConnection = ircConnection;
         this.channelName = channelName;
         this.topic = topic;
     }
 
-    public TopicEvent(IRCService ircService, IRCServiceConnection ircConnection, String channelName, String topic, String from) {
-        this(ircService, ircConnection, channelName, topic);
+    public TopicEvent(IRCServiceConnection ircConnection, String channelName, String topic, String from) {
+        this(ircConnection, channelName, topic);
         this.from = from;
     }
 
