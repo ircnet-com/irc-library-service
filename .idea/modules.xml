@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/IRCServiceLibrary.iml" filepath="$PROJECT_DIR$/IRCServiceLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/irc-library-service.iml" filepath="$PROJECT_DIR$/irc-library-service.iml" />
     </modules>
   </component>
 </project>

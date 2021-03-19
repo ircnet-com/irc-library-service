@@ -1,6 +1,5 @@
 package com.ircnet.library.service.connection;
 
-import com.ircnet.library.common.IRCTask;
 import com.ircnet.library.common.connection.IRCConnection;
 import com.ircnet.library.service.ServiceConfigurationModel;
 
@@ -11,8 +10,8 @@ public class IRCServiceConnection extends IRCConnection {
     private boolean burst;
     private Date burstStart;
 
-    public IRCServiceConnection(IRCTask ircTask, ServiceConfigurationModel configuration) {
-        super(ircTask, configuration);
+    public IRCServiceConnection(ServiceConfigurationModel configuration) {
+        super(configuration);
         this.serviceConfiguration = configuration;
     }
 

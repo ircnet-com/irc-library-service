@@ -1,13 +1,12 @@
 package com.ircnet.library.service.parser;
 
 
-import com.ircnet.library.common.Parser;
 import com.ircnet.library.common.User;
 import com.ircnet.library.common.Util;
 import com.ircnet.library.common.connection.ConnectionStatus;
-import com.ircnet.library.common.connection.IRCConnectionService;
 import com.ircnet.library.common.event.ConnectionStatusChangedEvent;
 import com.ircnet.library.common.event.EventBus;
+import com.ircnet.library.parser.ParserMapping;
 import com.ircnet.library.service.connection.IRCServiceConnection;
 import com.ircnet.library.service.event.*;
 import org.slf4j.Logger;
@@ -19,36 +18,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ParserImpl implements Parser<IRCServiceConnection> {
+public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceConnection> {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
 
     @Autowired
     private EventBus eventBus;
 
-    @Autowired
-    private IRCConnectionService ircConnectionService;
-
-    private List<ParserMapping> parserMappingList;
+    private List<ParserMapping<IRCServiceConnection>> parserMappingList;
 
     public ParserImpl() {
         parserMappingList = new ArrayList<>();
-        parserMappingList.add(new ParserMapping("PING", 0, 2, (arg1, arg2) -> parsePing(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("NICK", 0, 8, (arg1, arg2) -> parseNick(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("CHANNEL", 0, 0, (arg1, arg2) -> parseChannel(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("MODE", 0, 0, (arg1, arg2) -> parseChannelMode(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("TOPIC", 0, 3, (arg1, arg2) -> parseTopic(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("TOPIC", 1, 4, (arg1, arg2) -> parseTopicChange(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("SERVER", 1, 6, (arg1, arg2) -> parseServer(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("EOB", 0, 0, (arg1, arg2) -> parseEndOfBurst(arg1)));
-        parserMappingList.add(new ParserMapping("383", 1, 4, (arg1, arg2) -> parseYouAreService(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("MODE", 1, 0, (arg1, arg2) -> parseUserMode(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("SQUERY", 1, 4, (arg1, arg2) -> parseSQuery(arg1, arg2)));
-        parserMappingList.add(new ParserMapping("SERVSET", 1, 0, (arg1, arg2) -> parseServSet(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("NICK", 0, 8, (arg1, arg2) -> parseNick(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("CHANNEL", 0, 0, (arg1, arg2) -> parseChannel(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("MODE", 0, 0, (arg1, arg2) -> parseChannelMode(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("TOPIC", 0, 3, (arg1, arg2) -> parseTopic(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("TOPIC", 1, 4, (arg1, arg2) -> parseTopicChange(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("SERVER", 1, 6, (arg1, arg2) -> parseServer(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("EOB", 0, 0, (arg1, arg2) -> parseEndOfBurst(arg1)));
+        parserMappingList.add(new ParserMapping<>("383", 1, 4, (arg1, arg2) -> parseYouAreService(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("MODE", 1, 0, (arg1, arg2) -> parseUserMode(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("SQUERY", 1, 4, (arg1, arg2) -> parseSQuery(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("SERVSET", 1, 0, (arg1, arg2) -> parseServSet(arg1, arg2)));
     }
 
     @Override
     public void parse(IRCServiceConnection ircConnection, String line) {
+        super.parse(ircConnection, line);
+
         String[] parts = line.split(" ");
 
         for(ParserMapping parserMapping : parserMappingList) {
@@ -58,10 +55,6 @@ public class ParserImpl implements Parser<IRCServiceConnection> {
                 return;
             }
         }
-    }
-
-    private void parsePing(IRCServiceConnection ircConnection, String[] parts) {
-        ircConnectionService.send(ircConnection, "PONG %s", parts[1]);
     }
 
     private void parseYouAreService(IRCServiceConnection ircConnection, String[] parts) {

@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="irc-library-service" />
         <module name="IRCServiceLibrary" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="irc-library-service" target="1.8" />
       <module name="IRCServiceLibrary" target="1.8" />
     </bytecodeTargetLevel>
   </component>
