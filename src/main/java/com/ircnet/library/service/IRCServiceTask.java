@@ -14,7 +14,7 @@ public class IRCServiceTask extends IRCTask {
         super();
 
         this.configurationModel = configurationModel;
-        this.ircConnection = new IRCServiceConnection(this, configurationModel);
+        this.ircConnection = new IRCServiceConnection(configurationModel);
     }
 
     public void setIRCConnection(IRCConnection ircConnection) {
