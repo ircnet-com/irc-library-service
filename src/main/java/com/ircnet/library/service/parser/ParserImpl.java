@@ -40,8 +40,7 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
         parserMappingList.add(new ParserMapping<>("MODE", 1, 0, (arg1, arg2) -> parseUserMode(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("SQUERY", 1, 4, (arg1, arg2) -> parseSQuery(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("SERVSET", 1, 0, (arg1, arg2) -> parseServSet(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SASL", 0, 4, (arg1, arg2) -> parseSASL(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SASL_QUERY", 1, 6, (arg1, arg2) -> parseSASLQuery(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("SASL", 1, 6, (arg1, arg2) -> parseSASL(arg1, arg2)));
     }
 
     @Override
@@ -171,16 +170,6 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
     }
 
     private void parseSASL(IRCServiceConnection ircConnection, String[] parts) {
-        /*
-            parts[0] = "SASL"
-            parts[1] = UID nick
-            parts[2] = type ('H', 'S', 'C')
-            parts[3] = data
-        */
-        eventBus.publishEvent(new SASLEvent(ircConnection, parts[1], parts[2], parts[3]));
-    }
-
-    private void parseSASLQuery(IRCServiceConnection ircConnection, String[] parts) {
         /*
             parts[0] = Server
             parts[1] = "SASL"
