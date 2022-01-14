@@ -9,13 +9,16 @@ import com.ircnet.library.common.event.EventBus;
 import com.ircnet.library.parser.ParserMapping;
 import com.ircnet.library.service.connection.IRCServiceConnection;
 import com.ircnet.library.service.event.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceConnection> {
@@ -29,21 +32,32 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
 
     public ParserImpl() {
         parserMappingList = new ArrayList<>();
-        parserMappingList.add(new ParserMapping<>("NICK", 0, 8, (arg1, arg2) -> parseNick(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("CHANNEL", 0, 0, (arg1, arg2) -> parseChannel(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("MODE", 0, 0, (arg1, arg2) -> parseChannelMode(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("TOPIC", 0, 3, (arg1, arg2) -> parseTopic(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("TOPIC", 1, 4, (arg1, arg2) -> parseTopicChange(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SERVER", 1, 6, (arg1, arg2) -> parseServer(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("EOB", 0, 0, (arg1, arg2) -> parseEndOfBurst(arg1)));
-        parserMappingList.add(new ParserMapping<>("383", 1, 4, (arg1, arg2) -> parseYouAreService(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("MODE", 1, 0, (arg1, arg2) -> parseUserMode(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SQUERY", 1, 4, (arg1, arg2) -> parseSQuery(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SERVSET", 1, 0, (arg1, arg2) -> parseServSet(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("NICK", 0, 8, (arg1, arg2, arg3) -> parseNick(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("CHANNEL", 0, 0, (arg1, arg2, arg3) -> parseChannel(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("MODE", 0, 0, (arg1, arg2, arg3) -> parseChannelMode(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("TOPIC", 0, 3, (arg1, arg2, arg3) -> parseTopic(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("TOPIC", 1, 4, (arg1, arg2, arg3) -> parseTopicChange(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("SERVER", 1, 6, (arg1, arg2, arg3) -> parseServer(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("EOB", 0, 0, (arg1, arg2, arg3) -> parseEndOfBurst(arg1)));
+        parserMappingList.add(new ParserMapping<>("383", 1, 4, (arg1, arg2, arg3) -> parseYouAreService(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("MODE", 1, 0, (arg1, arg2, arg3) -> parseUserMode(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("SQUERY", 1, 4, (arg1, arg2, arg3) -> parseSQuery(arg1, arg2, arg3)));
+        parserMappingList.add(new ParserMapping<>("SERVSET", 1, 0, (arg1, arg2, arg3) -> parseServSet(arg1, arg2)));
     }
 
     @Override
-    public void parse(IRCServiceConnection ircConnection, String line) {
+    public void parse(IRCServiceConnection ircConnection, String input) {
+        String line;
+        Map<String, String> tagMap = new HashMap<>();
+
+        if(input.charAt(0) == '@') {
+            tagMap.putAll(parseMessageTags(input));
+            line = StringUtils.substringAfter(input, " ");
+        }
+        else {
+            line = input;
+        }
+
         super.parse(ircConnection, line);
 
         String[] parts = line.split(" ");
@@ -51,10 +65,30 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
         for(ParserMapping parserMapping : parserMappingList) {
             if(parts.length > parserMapping.getIndex() && parserMapping.getKey().equals(parts[parserMapping.getIndex()])) {
                 parts = line.split(" ", parserMapping.getArgumentCount());
-                parserMapping.getParserMethod().parse(ircConnection, parts);
+                parserMapping.getParserMethod().parse(ircConnection, parts, tagMap);
                 return;
             }
         }
+    }
+
+    /**
+     * Creates a map of message tags from things like:
+     *   "@aaa=bbb;ccc;example.com/ddd=eee :nick!ident@host PRIVMSG me :Hello"
+     *
+     * @param line
+     * @return
+     */
+    private Map<String, String> parseMessageTags(String line) {
+        Map<String, String> tagMap = new HashMap<>();
+        String[] parts = line.split(" ", 2);
+        String[] tags = parts[0].substring(1).split(";");
+
+        for (String tag : tags) {
+            String[] keyAndValue = tag.split("=");
+            tagMap.put(keyAndValue[0], keyAndValue.length > 1 ? keyAndValue[1] : null);
+        }
+
+        return tagMap;
     }
 
     private void parseYouAreService(IRCServiceConnection ircConnection, String[] parts) {
@@ -143,14 +177,14 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
         eventBus.publishEvent(new UserModeEvent(ircConnection, parts[2], parts[3]));
     }
 
-    private void parseSQuery(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseSQuery(IRCServiceConnection ircConnection, String[] parts, Map<String, String> messageTags) {
         /*
             parts[0] = hostmask of the sender
             parts[1] = "SQUERY"
             parts[2] = my service name
             parts[3] = message
         */
-        eventBus.publishEvent(new SQueryEvent(ircConnection, new User(parts[0]), Util.removeLeadingColon(parts[3])));
+        eventBus.publishEvent(new SQueryEvent(ircConnection, messageTags, new User(parts[0]), Util.removeLeadingColon(parts[3])));
     }
 
     private void parseEndOfBurst(IRCServiceConnection ircConnection) {
