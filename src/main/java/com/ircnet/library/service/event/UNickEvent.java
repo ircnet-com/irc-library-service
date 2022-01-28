@@ -10,9 +10,11 @@ public class UNickEvent extends AbstractServiceEvent {
     private String host;
     private String ipAddress;
     private String userModes;
+    private String account;
     private String realName;
 
-    public UNickEvent(IRCServiceConnection ircConnection, String sid, String uid, String nick, String user, String host, String ipAddress, String userModes, String realName) {
+    public UNickEvent(IRCServiceConnection ircConnection, String sid, String uid, String nick, String user, String host,
+                      String ipAddress, String userModes, String account, String realName) {
         this.ircConnection = ircConnection;
         this.sid = sid;
         this.uid = uid;
@@ -21,6 +23,7 @@ public class UNickEvent extends AbstractServiceEvent {
         this.host = host;
         this.ipAddress = ipAddress;
         this.userModes = userModes;
+        this.account = account;
         this.realName = realName;
     }
 
@@ -78,6 +81,14 @@ public class UNickEvent extends AbstractServiceEvent {
 
     public void setUserModes(String userModes) {
         this.userModes = userModes;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getRealName() {

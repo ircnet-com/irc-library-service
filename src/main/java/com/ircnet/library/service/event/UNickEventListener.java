@@ -10,8 +10,8 @@ public class UNickEventListener extends AbstractEventListener<UNickEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(UNickEventListener.class);
 
     protected void onEvent(UNickEvent event) {
-        LOGGER.trace("UNickEvent sid={} nick={} user={} host={} userModes={} realName={}",
-                event.getSid(), event.getNick(), event.getUser(), event.getHost(), event.getUserModes(),
-                event.getRealName());
+        LOGGER.trace("UNickEvent sid={} uid={} nick={} user={} host={} ipAddress={} userModes={} account={} realName={}",
+                event.getSid(), event.getUid(), event.getNick(), event.getUser(), event.getHost(), event.getIpAddress(),
+                event.getUserModes(), event.getAccount(), event.getRealName());
     }
 }
