@@ -133,7 +133,10 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
             parts[8] = account or * if not authenticated (since contempt-1.0.3)
             parts[9] = real name (starting with ':')
         */
-        eventBus.publishEvent(new UNickEvent(ircConnection, Util.removeLeadingColon(parts[0]), parts[3], parts[2], parts[4], parts[5], parts[6], parts[7], parts[8],Util.removeLeadingColon(parts[9])));
+        eventBus.publishEvent(new UNickEvent(ircConnection, Util.removeLeadingColon(parts[0]), parts[3], parts[2],
+                parts[4], parts[5], parts[6], parts[7],
+                parts.length > 9 ? parts[8] : "*",
+                Util.removeLeadingColon(parts.length > 9 ? parts[9] : parts[8])));
     }
 
     private void parseNickChange(IRCServiceConnection ircConnection, String[] parts) {
