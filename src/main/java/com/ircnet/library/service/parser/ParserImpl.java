@@ -47,6 +47,7 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
         parserMappingList.add(new ParserMapping<>("SQUERY", 1, 4, (arg1, arg2, arg3) -> parseSQuery(arg1, arg2, arg3)));
         parserMappingList.add(new ParserMapping<>("SERVSET", 1, 0, (arg1, arg2, arg3) -> parseServSet(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("SASL", 1, 6, (arg1, arg2, arg3) -> parseSASL(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("481", 1, 4, (arg1, arg2, arg3) -> parsePermissionDenied(arg1, arg2)));
     }
 
     @Override
@@ -253,5 +254,15 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
             parts[5] = data
         */
         eventBus.publishEvent(new SASLEvent(ircConnection, parts[2], parts[4], parts[5]));
+    }
+
+    private void parsePermissionDenied(IRCServiceConnection ircConnection, String[] parts) {
+        /*
+            parts[0] = server (starting with ':')
+            parts[1] = "481"
+            parts[2] = my service name
+            parts[3] = ":Permission Denied"
+        */
+        eventBus.publishEvent(new PermissionDeniedEvent(ircConnection, Util.removeLeadingColon(parts[0]), Util.removeLeadingColon(parts[3])));
     }
 }
