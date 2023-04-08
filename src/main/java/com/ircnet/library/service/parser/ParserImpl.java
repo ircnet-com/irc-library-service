@@ -47,7 +47,7 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
     }
 
     @Override
-    public void parse(IRCServiceConnection ircConnection, String input) {
+    public boolean parse(IRCServiceConnection ircConnection, String input) {
         String line;
         Map<String, String> tagMap = new HashMap<>();
 
@@ -67,9 +67,11 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
             if(parts.length > parserMapping.getIndex() && parserMapping.getKey().equals(parts[parserMapping.getIndex()])) {
                 parts = line.split(" ", parserMapping.getArgumentCount());
                 parserMapping.getParserMethod().parse(ircConnection, parts, tagMap);
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
