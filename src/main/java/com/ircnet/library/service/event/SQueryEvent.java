@@ -2,9 +2,11 @@ package com.ircnet.library.service.event;
 
 import com.ircnet.library.common.User;
 import com.ircnet.library.service.connection.IRCServiceConnection;
+import lombok.Getter;
 
 import java.util.Map;
 
+@Getter
 public class SQueryEvent extends AbstractServiceEvent {
     private User from;
     private String message;
@@ -14,13 +16,5 @@ public class SQueryEvent extends AbstractServiceEvent {
         this.messageTags = messageTags;
         this.from = from;
         this.message = message;
-    }
-
-    public User getFrom() {
-        return from;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }

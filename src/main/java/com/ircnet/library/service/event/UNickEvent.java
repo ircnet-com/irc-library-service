@@ -1,7 +1,9 @@
 package com.ircnet.library.service.event;
 
 import com.ircnet.library.service.connection.IRCServiceConnection;
+import lombok.Getter;
 
+@Getter
 public class UNickEvent extends AbstractServiceEvent {
     private String sid;
     private String uid;
@@ -24,78 +26,6 @@ public class UNickEvent extends AbstractServiceEvent {
         this.ipAddress = ipAddress;
         this.userModes = userModes;
         this.account = account;
-        this.realName = realName;
-    }
-
-    public String getSid() {
-        return sid;
-    }
-
-    public void setSid(String sid) {
-        this.sid = sid;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getNick() {
-        return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public String getUserModes() {
-        return userModes;
-    }
-
-    public void setUserModes(String userModes) {
-        this.userModes = userModes;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
         this.realName = realName;
     }
 }

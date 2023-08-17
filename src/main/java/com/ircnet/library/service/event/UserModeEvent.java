@@ -1,7 +1,9 @@
 package com.ircnet.library.service.event;
 
 import com.ircnet.library.service.connection.IRCServiceConnection;
+import lombok.Getter;
 
+@Getter
 public class UserModeEvent extends AbstractServiceEvent {
     private String nick;
     private String modes;
@@ -10,13 +12,5 @@ public class UserModeEvent extends AbstractServiceEvent {
         this.ircConnection = ircConnection;
         this.nick = nick;
         this.modes = modes;
-    }
-
-    public String getNick() {
-        return nick;
-    }
-
-    public String getModes() {
-        return modes;
     }
 }

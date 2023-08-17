@@ -2,17 +2,19 @@ package com.ircnet.library.service;
 
 import com.ircnet.library.common.configuration.ConfigurationModel;
 import com.ircnet.library.common.configuration.IRCServerModel;
+import lombok.Data;
 
 import java.util.List;
 
 /**
  * Contains the configuration of the service.
  */
+@Data
 public class ServiceConfigurationModel implements ConfigurationModel {
     /**
      * This is the name of the service as configured in the S line.
      */
-    private String serviceName;
+    private String name;
 
     /**
      * This is the distribution mask for this connection.
@@ -23,7 +25,7 @@ public class ServiceConfigurationModel implements ConfigurationModel {
      * This is the service type as configured in the S line.
      * The service type is a bit mask which defines what information the service can see and they are allowed to do.
      */
-    private int serviceType;
+    private int type;
 
     /**
      * It is a subset of the service type. It defines what kind of information the service wants to receive for
@@ -51,70 +53,14 @@ public class ServiceConfigurationModel implements ConfigurationModel {
     private String info;
 
     /**
-     * This is the password as configured in the S line.
-     */
-    private String password;
-
-    /**
      * Contains information about the irc servers to connect to.
      */
     List<IRCServerModel> ircServers;
 
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
-
-    public String getDistributionMask() {
-        return distributionMask;
-    }
-
-    public void setDistributionMask(String distributionMask) {
-        this.distributionMask = distributionMask;
-    }
-
-    public int getServiceType() {
-        return serviceType;
-    }
-
-    public void setServiceType(int serviceType) {
-        this.serviceType = serviceType;
-    }
-
-    public int getDataFlags() {
-        return dataFlags;
-    }
-
-    public void setDataFlags(int dataFlags) {
-        this.dataFlags = dataFlags;
-    }
-
-    public int getBurstFlags() {
-        return burstFlags;
-    }
-
-    public void setBurstFlags(int burstFlags) {
-        this.burstFlags = burstFlags;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    /**
+     * The IP address the service uses to connect to an IRC server.
+     */
+    private String localAddress;
 
     @Override
     public List<IRCServerModel> getIrcServers() {
@@ -127,7 +73,7 @@ public class ServiceConfigurationModel implements ConfigurationModel {
 
     @Override
     public String getLocalAddress() {
-        return null;
+        return localAddress;
     }
 
     @Override
@@ -137,6 +83,6 @@ public class ServiceConfigurationModel implements ConfigurationModel {
 
     @Override
     public String getUserId() {
-        return serviceName;
+        return name;
     }
 }
