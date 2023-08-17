@@ -1,7 +1,9 @@
 package com.ircnet.library.service.event;
 
 import com.ircnet.library.service.connection.IRCServiceConnection;
+import lombok.Getter;
 
+@Getter
 public class NickEvent extends AbstractServiceEvent {
     private String nick;
     private String user;
@@ -21,33 +23,5 @@ public class NickEvent extends AbstractServiceEvent {
         this.serverName = serverName;
         this.hopCount = hopCount;
         this.userModes = userModes;
-    }
-
-    public String getNick() {
-        return nick;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public String getServerName() {
-        return serverName;
-    }
-
-    public int getHopCount() {
-        return hopCount;
-    }
-
-    public String getUserModes() {
-        return userModes;
     }
 }

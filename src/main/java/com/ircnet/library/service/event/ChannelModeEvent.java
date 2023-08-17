@@ -1,7 +1,9 @@
 package com.ircnet.library.service.event;
 
 import com.ircnet.library.service.connection.IRCServiceConnection;
+import lombok.Getter;
 
+@Getter
 public class ChannelModeEvent extends AbstractServiceEvent {
     private String channelName;
     private String modes;
@@ -10,13 +12,5 @@ public class ChannelModeEvent extends AbstractServiceEvent {
         this.ircConnection = ircConnection;
         this.channelName = channelName;
         this.modes = modes;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public String getModes() {
-        return modes;
     }
 }

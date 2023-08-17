@@ -4,5 +4,5 @@ import com.ircnet.library.common.connection.IRCConnectionServiceImpl;
 import org.springframework.stereotype.Service;
 
 @Service
-public class IRCServiceConnectionServiceImpl extends IRCConnectionServiceImpl{
+public class IRCServiceConnectionServiceImpl extends IRCConnectionServiceImpl {
 }
