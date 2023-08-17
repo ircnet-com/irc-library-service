@@ -57,8 +57,8 @@ public class ConnectionStatusChangedEventListener extends AbstractEventListener<
 
     protected void onConnectionEstablished(IRCServiceConnection ircConnection) {
         ServiceConfigurationModel config = ircConnection.getServiceConfiguration();
-        ircConnectionService.send(ircConnection, "PASS %s", config.getPassword());
-        ircConnectionService.send(ircConnection, "SERVICE %s %s %s :%s" , config.getServiceName(), config.getDistributionMask(), "0x" + Integer.toHexString(config.getServiceType()), config.getInfo());
+        ircConnectionService.send(ircConnection, "PASS %s",  ircConnection.getCurrentServer().getPassword());
+        ircConnectionService.send(ircConnection, "SERVICE %s %s %s :%s" , config.getName(), config.getDistributionMask(), "0x" + Integer.toHexString(config.getType()), config.getInfo());
     }
 
     private void prepareDelayedReconnect(IRCConnection ircConnection) {
