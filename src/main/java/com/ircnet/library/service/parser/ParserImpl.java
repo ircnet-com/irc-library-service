@@ -41,6 +41,7 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
         parserMappingList.add(new ParserMapping<>("TOPIC", 0, 3, (arg1, arg2, arg3) -> parseTopic(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("TOPIC", 1, 4, (arg1, arg2, arg3) -> parseTopicChange(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("SERVER", 1, 6, (arg1, arg2, arg3) -> parseServer(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("SQUIT", 1, 4, (arg1, arg2, arg3) -> parseSQuit(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("EOB", 0, 0, (arg1, arg2, arg3) -> parseEndOfBurst(arg1)));
         parserMappingList.add(new ParserMapping<>("383", 1, 4, (arg1, arg2, arg3) -> parseYouAreService(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("MODE", 1, 0, (arg1, arg2, arg3) -> parseUserMode(arg1, arg2)));
@@ -121,6 +122,16 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
             parts[5] = service info (starting with ':')
         */
         eventBus.publishEvent(new ServerEvent(ircConnection, parts[2], Integer.parseInt(parts[3]), parts[4], Util.removeLeadingColon(parts[5])));
+    }
+
+    private void parseSQuit(IRCServiceConnection ircConnection, String[] parts) {
+        /*
+            parts[0] = sender (starting with ':')
+            parts[1] = "SQUIT"
+            parts[2] = name of the quitting server
+            parts[3] = reason
+        */
+        eventBus.publishEvent(new SQuitEvent(ircConnection, Util.removeLeadingColon(parts[0]),  parts[2], Util.removeLeadingColon(parts[3])));
     }
 
     private void parseUNick(IRCServiceConnection ircConnection, String[] parts) {
