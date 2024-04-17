@@ -10,7 +10,7 @@ public class SASLEventListener extends AbstractEventListener<SASLEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SASLEventListener.class);
 
     protected void onEvent(SASLEvent event) {
-        LOGGER.trace("SASLEvent uidNick={} type={} data='{}'", event.getUidNick(), event.getType(),
-                event.getData());
+        LOGGER.trace("SASLEvent serverName={} uidNick={} type={} data='{}'", event.getServerName(), event.getUidNick(),
+                event.getType(), event.getData());
     }
 }

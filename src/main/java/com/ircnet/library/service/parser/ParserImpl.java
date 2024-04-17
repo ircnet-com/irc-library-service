@@ -259,14 +259,14 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
 
     private void parseSASL(IRCServiceConnection ircConnection, String[] parts) {
         /*
-            parts[0] = Server
+            parts[0] = server (starting with ':')
             parts[1] = "SASL"
             parts[2] = UID
-            parts[3] = Service Name
+            parts[3] = my service Name
             parts[4] = type ('H', 'S', 'C')
             parts[5] = data
         */
-        eventBus.publishEvent(new SASLEvent(ircConnection, parts[2], parts[4], parts[5]));
+        eventBus.publishEvent(new SASLEvent(ircConnection, Util.removeLeadingColon(parts[0]), parts[2], parts[4], parts[5]));
     }
 
     private void parsePermissionDenied(IRCServiceConnection ircConnection, String[] parts) {
