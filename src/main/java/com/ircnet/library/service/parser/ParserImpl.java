@@ -32,6 +32,7 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
 
     public ParserImpl() {
         parserMappingList = new ArrayList<>();
+        parserMappingList.add(new ParserMapping<>("UNICK", 1, 10, (arg1, arg2, arg3) -> parseUNick(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("NICK", 1, 3, (arg1, arg2, arg3) -> parseNickChange(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("NICK", 0, 8, (arg1, arg2, arg3) -> parseNick(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("CHANNEL", 0, 0, (arg1, arg2, arg3) -> parseChannel(arg1, arg2)));
@@ -133,6 +134,24 @@ public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceC
         eventBus.publishEvent(new SQuitEvent(ircConnection, Util.removeLeadingColon(parts[0]),  parts[2], Util.removeLeadingColon(parts[3])));
     }
 
+    private void parseUNick(IRCServiceConnection ircConnection, String[] parts) {
+        /*
+            parts[0] = server (starting with ':')
+            parts[1] = UNICK
+            parts[2] = nick
+            parts[3] = UID
+            parts[4] = username / ident
+            parts[5] = hostname
+            parts[6] = IP address
+            parts[7] = user modes (starting with '+')
+            parts[8] = account or * if not authenticated (since contempt-1.0.3)
+            parts[9] = real name (starting with ':')
+        */
+        eventBus.publishEvent(new UNickEvent(ircConnection, Util.removeLeadingColon(parts[0]), parts[3], parts[2],
+                parts[4], parts[5], parts[6], parts[7],
+                parts.length > 9 ? parts[8] : "*",
+                Util.removeLeadingColon(parts.length > 9 ? parts[9] : parts[8])));
+    }
 
     private void parseNickChange(IRCServiceConnection ircConnection, String[] parts) {
         /*
