@@ -4,7 +4,7 @@ import com.ircnet.library.common.event.EventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 @Component("ServiceLibraryEventRegistrant")
 public class EventRegistrant {
