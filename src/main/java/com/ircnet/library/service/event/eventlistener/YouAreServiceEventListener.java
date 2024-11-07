@@ -1,20 +1,21 @@
-package com.ircnet.library.service.event;
+package com.ircnet.library.service.event.eventlistener;
 
 import com.ircnet.library.common.connection.ConnectionStatus;
 import com.ircnet.library.common.connection.IRCConnectionService;
 import com.ircnet.library.common.event.AbstractEventListener;
 import com.ircnet.library.service.ServiceConfigurationModel;
+import com.ircnet.library.service.event.YouAreServiceEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component("defaultYouAreServiceEventListener")
 public class YouAreServiceEventListener extends AbstractEventListener<YouAreServiceEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(YouAreServiceEventListener.class);
 
-    @Autowired
     private IRCConnectionService ircConnectionService;
+
+    public YouAreServiceEventListener(IRCConnectionService ircConnectionService) {
+        this.ircConnectionService = ircConnectionService;
+    }
 
     protected void onEvent(YouAreServiceEvent event) {
         event.getIRCConnection().setConnectionStatus(ConnectionStatus.REGISTERED);

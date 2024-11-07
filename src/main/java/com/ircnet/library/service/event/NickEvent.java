@@ -9,7 +9,6 @@ public class NickEvent extends AbstractServiceEvent {
     private String user;
     private String host;
     private String realName;
-
     private String serverName;
     private int hopCount;
     private String userModes;

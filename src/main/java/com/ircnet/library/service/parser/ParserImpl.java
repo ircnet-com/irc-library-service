@@ -12,25 +12,21 @@ import com.ircnet.library.service.event.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service("parser")
 public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceConnection> {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
 
-    @Autowired
     private EventBus eventBus;
-
     private List<ParserMapping<IRCServiceConnection>> parserMappingList;
 
-    public ParserImpl() {
+    public ParserImpl(EventBus eventBus) {
+        this.eventBus = eventBus;
         parserMappingList = new ArrayList<>();
         parserMappingList.add(new ParserMapping<>("UNICK", 1, 10, (arg1, arg2, arg3) -> parseUNick(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("NICK", 1, 3, (arg1, arg2, arg3) -> parseNickChange(arg1, arg2)));

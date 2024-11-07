@@ -55,7 +55,7 @@ public class ServiceConfigurationModel implements ConfigurationModel {
     /**
      * Contains information about the irc servers to connect to.
      */
-    List<IRCServerModel> ircServers;
+    private List<IRCServerModel> ircServers;
 
     /**
      * The IP address the service uses to connect to an IRC server.
