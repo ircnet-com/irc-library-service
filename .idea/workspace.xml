@@ -4,38 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="77b269d1-109e-4737-a223-14119f31a0f7" name="Default" comment="Refactoring to support Spring">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/IRCServiceConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/IRCServiceEventConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="77b269d1-109e-4737-a223-14119f31a0f7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/IRCServiceTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/ServiceConfigurationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/ServiceConfigurationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/connection/IRCServiceConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/connection/IRCServiceConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/connection/IRCServiceConnectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/connection/IRCServiceConnectionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/AbstractServiceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/AbstractServiceEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/ChannelEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/ChannelModeEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/ConnectionStatusChangedEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/eventlistener/ConnectionStatusChangedEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/EndOfBurstEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/eventlistener/EndOfBurstEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/EventRegistrant.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/NickChangedEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/NickEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/NickEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/NickEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/PermissionDeniedEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/QuitEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/SASLEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/SQueryEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/SQuitEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/ServSetEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/eventlistener/ServSetEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/ServerEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/TopicEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/UNickEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/UserModeEventListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/YouAreServiceEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/event/eventlistener/YouAreServiceEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/IRCServiceConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/IRCServiceConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/IRCServiceEventConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/IRCServiceEventConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/parser/ParserImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ircnet/library/service/parser/ParserImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -473,7 +445,7 @@
       <workItem from="1726435618066" duration="3780000" />
       <workItem from="1726470374517" duration="2696000" />
       <workItem from="1730378934972" duration="2921000" />
-      <workItem from="1731007946588" duration="7340000" />
+      <workItem from="1731007946588" duration="8112000" />
     </task>
     <task id="LOCAL-00001" summary="Refactoring to support Spring">
       <created>1615582629195</created>
@@ -514,7 +486,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726470396530</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Refactoring">
+      <option name="closed" value="true" />
+      <created>1731015433503</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1731015433503</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -592,7 +572,8 @@
     <MESSAGE value="Added some shared and commonly used classes" />
     <MESSAGE value="Migration to Spring Boot 3" />
     <MESSAGE value="Added &lt;dependencyManagement&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added &lt;dependencyManagement&gt;" />
+    <MESSAGE value="Refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactoring" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ircnet/library/service/connection/IRCServiceConnection.java">

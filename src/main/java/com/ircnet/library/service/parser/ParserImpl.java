@@ -6,7 +6,7 @@ import com.ircnet.library.common.Util;
 import com.ircnet.library.common.connection.ConnectionStatus;
 import com.ircnet.library.common.event.ConnectionStatusChangedEvent;
 import com.ircnet.library.common.event.EventBus;
-import com.ircnet.library.parser.ParserMapping;
+import com.ircnet.library.common.parser.ParserMapping;
 import com.ircnet.library.service.connection.IRCServiceConnection;
 import com.ircnet.library.service.event.*;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ParserImpl extends com.ircnet.library.parser.ParserImpl<IRCServiceConnection> {
+public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCServiceConnection> {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
 

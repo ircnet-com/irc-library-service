@@ -1,6 +1,6 @@
 package com.ircnet.library.service;
 
-import com.ircnet.library.common.IRCCommonLibraryConfiguration;
+import com.ircnet.library.common.IRCCommonConfiguration;
 import com.ircnet.library.common.SettingService;
 import com.ircnet.library.common.connection.IRCConnectionService;
 import com.ircnet.library.common.event.EventBus;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({ IRCCommonLibraryConfiguration.class })
+@Import({ IRCCommonConfiguration.class })
 public class IRCServiceEventConfiguration {
     @Autowired
     private EventBus eventBus;
