@@ -1,11 +1,10 @@
-package com.ircnet.library.service.event;
+package com.ircnet.library.service.event.eventlistener;
 
 import com.ircnet.library.common.event.AbstractEventListener;
+import com.ircnet.library.service.event.EndOfBurstEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-@Component("defaultEndOfBurstEventListener")
 public class EndOfBurstEventListener extends AbstractEventListener<EndOfBurstEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(EndOfBurstEventListener.class);
 
