@@ -4,6 +4,8 @@ package com.ircnet.library.service.parser;
 import com.ircnet.library.common.User;
 import com.ircnet.library.common.Util;
 import com.ircnet.library.common.connection.ConnectionStatus;
+import com.ircnet.library.common.connection.IRCConnection;
+import com.ircnet.library.common.connection.IRCConnectionService;
 import com.ircnet.library.common.event.ConnectionStatusChangedEvent;
 import com.ircnet.library.common.event.EventBus;
 import com.ircnet.library.common.parser.ParserMapping;
@@ -12,6 +14,7 @@ import com.ircnet.library.service.event.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +28,8 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
     private EventBus eventBus;
     private List<ParserMapping<IRCServiceConnection>> parserMappingList;
 
-    public ParserImpl(EventBus eventBus) {
+    public ParserImpl(IRCConnectionService ircConnectionService, EventBus eventBus) {
+        this.ircConnectionService = ircConnectionService;
         this.eventBus = eventBus;
         parserMappingList = new ArrayList<>();
         parserMappingList.add(new ParserMapping<>("UNICK", 1, 10, (arg1, arg2, arg3) -> parseUNick(arg1, arg2)));
