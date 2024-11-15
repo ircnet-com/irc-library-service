@@ -8,13 +8,11 @@ import com.ircnet.library.service.event.YouAreServiceEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class YouAreServiceEventListener extends AbstractEventListener<YouAreServiceEvent> {
+public class YouAreServiceEventListener extends AbstractEventListener<YouAreServiceEvent, IRCConnectionService> {
     private static final Logger LOGGER = LoggerFactory.getLogger(YouAreServiceEventListener.class);
 
-    private IRCConnectionService ircConnectionService;
-
     public YouAreServiceEventListener(IRCConnectionService ircConnectionService) {
-        this.ircConnectionService = ircConnectionService;
+        super(ircConnectionService);
     }
 
     protected void onEvent(YouAreServiceEvent event) {

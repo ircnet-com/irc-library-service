@@ -29,7 +29,7 @@ public class IRCServiceEventConfiguration {
     public void registerEventListeners() {
         eventBus.registerEventListener(0, new ConnectionStatusChangedEventListener(ircConnectionService, settingService));
         eventBus.registerEventListener(0, new YouAreServiceEventListener(ircConnectionService));
-        eventBus.registerEventListener(0, new EndOfBurstEventListener());
-        eventBus.registerEventListener(0, new ServSetEventListener());
+        eventBus.registerEventListener(0, new EndOfBurstEventListener(ircConnectionService));
+        eventBus.registerEventListener(0, new ServSetEventListener(ircConnectionService));
     }
 }

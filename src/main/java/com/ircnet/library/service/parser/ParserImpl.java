@@ -166,14 +166,19 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
         /*
             parts[0] = "NICK"
             parts[1] = nick
-            parts[2] = 1
-            parts[3] = user name / ident
+            parts[2] = hop count
+            parts[3] = username / ident
             parts[4] = hostname
             parts[5] = irc server name
             parts[6] = user modes (starting with '+')
             parts[7] = real name (starting with ':')
         */
-        eventBus.publishEvent(new NickEvent(ircConnection, parts[1], parts[3], parts[4], Util.removeLeadingColon(parts[7]), parts[5], Integer.parseInt(parts[2]), parts[6]));
+        if(parts.length == 3) {
+            eventBus.publishEvent(new NickEvent(ircConnection, parts[1], Integer.parseInt(Util.removeLeadingColon(parts[2]))));
+        }
+        else if(parts.length == 8) {
+            eventBus.publishEvent(new NickEvent(ircConnection, parts[1], parts[3], parts[4], Util.removeLeadingColon(parts[7]), parts[5], Integer.parseInt(parts[2]), parts[6]));
+        }
     }
 
     private void parseChannel(IRCServiceConnection ircConnection, String[] parts) {
