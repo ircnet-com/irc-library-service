@@ -14,15 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
-public class ConnectionStatusChangedEventListener extends AbstractEventListener<ConnectionStatusChangedEvent> {
+public class ConnectionStatusChangedEventListener extends AbstractEventListener<ConnectionStatusChangedEvent, IRCConnectionService> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionStatusChangedEventListener.class);
 
-    private IRCConnectionService ircConnectionService;
     private SettingService settingService;
 
     public ConnectionStatusChangedEventListener(IRCConnectionService ircConnectionService,
                                                 SettingService settingService) {
-        this.ircConnectionService = ircConnectionService;
+        super(ircConnectionService);
         this.settingService = settingService;
     }
 

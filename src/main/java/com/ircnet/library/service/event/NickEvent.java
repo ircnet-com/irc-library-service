@@ -13,6 +13,12 @@ public class NickEvent extends AbstractServiceEvent {
     private int hopCount;
     private String userModes;
 
+    public NickEvent(IRCServiceConnection ircConnection, String nick, int hopCount) {
+        this.ircConnection = ircConnection;
+        this.nick = nick;
+        this.hopCount = hopCount;
+    }
+
     public NickEvent(IRCServiceConnection ircConnection, String nick, String user, String host, String realName, String serverName, int hopCount, String userModes) {
         this.ircConnection = ircConnection;
         this.nick = nick;

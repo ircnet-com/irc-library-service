@@ -18,7 +18,7 @@ public class IRCServer {
     private String name;
 
     /**
-     * HOP count.
+     * hop count.
      */
     private int hopCount;
 
