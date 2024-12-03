@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCServiceConnection> {
@@ -22,7 +21,6 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
     private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
 
     private EventBus eventBus;
-    private List<ParserMapping<IRCServiceConnection>> parserMappingList;
 
     public ParserImpl(IRCConnectionService ircConnectionService, EventBus eventBus) {
         this.ircConnectionService = ircConnectionService;
