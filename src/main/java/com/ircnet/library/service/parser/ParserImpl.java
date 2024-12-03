@@ -4,20 +4,16 @@ package com.ircnet.library.service.parser;
 import com.ircnet.library.common.User;
 import com.ircnet.library.common.Util;
 import com.ircnet.library.common.connection.ConnectionStatus;
-import com.ircnet.library.common.connection.IRCConnection;
 import com.ircnet.library.common.connection.IRCConnectionService;
 import com.ircnet.library.common.event.ConnectionStatusChangedEvent;
 import com.ircnet.library.common.event.EventBus;
 import com.ircnet.library.common.parser.ParserMapping;
 import com.ircnet.library.service.connection.IRCServiceConnection;
 import com.ircnet.library.service.event.*;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,50 +49,7 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
 
     @Override
     public boolean parse(IRCServiceConnection ircConnection, String input) {
-        String line;
-        Map<String, String> tagMap = new HashMap<>();
-
-        if(input.charAt(0) == '@') {
-            tagMap.putAll(parseMessageTags(input));
-            line = StringUtils.substringAfter(input, " ");
-        }
-        else {
-            line = input;
-        }
-
-        super.parse(ircConnection, line);
-
-        String[] parts = line.split(" ");
-
-        for(ParserMapping parserMapping : parserMappingList) {
-            if(parts.length > parserMapping.getIndex() && parserMapping.getKey().equals(parts[parserMapping.getIndex()])) {
-                parts = line.split(" ", parserMapping.getArgumentCount());
-                parserMapping.getParserMethod().parse(ircConnection, parts, tagMap);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Creates a map of message tags from things like:
-     *   "@aaa=bbb;ccc;example.com/ddd=eee :nick!ident@host PRIVMSG me :Hello"
-     *
-     * @param line
-     * @return
-     */
-    private Map<String, String> parseMessageTags(String line) {
-        Map<String, String> tagMap = new HashMap<>();
-        String[] parts = line.split(" ", 2);
-        String[] tags = parts[0].substring(1).split(";");
-
-        for (String tag : tags) {
-            String[] keyAndValue = tag.split("=");
-            tagMap.put(keyAndValue[0], keyAndValue.length > 1 ? keyAndValue[1] : null);
-        }
-
-        return tagMap;
+        return super.parse(ircConnection, input);
     }
 
     private void parseYouAreService(IRCServiceConnection ircConnection, String[] parts) {
