@@ -25,7 +25,6 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
     public ParserImpl(IRCConnectionService ircConnectionService, EventBus eventBus) {
         this.ircConnectionService = ircConnectionService;
         this.eventBus = eventBus;
-        parserMappingList = new ArrayList<>();
         parserMappingList.add(new ParserMapping<>("UNICK", 1, 10, (arg1, arg2, arg3) -> parseUNick(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("NICK", 1, 3, (arg1, arg2, arg3) -> parseNickChange(arg1, arg2)));
         parserMappingList.add(new ParserMapping<>("NICK", 0, 8, (arg1, arg2, arg3) -> parseNick(arg1, arg2)));
@@ -47,6 +46,7 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
 
     @Override
     public boolean parse(IRCServiceConnection ircConnection, String input) {
+        LOGGER.debug("{}", input);
         return super.parse(ircConnection, input);
     }
 
