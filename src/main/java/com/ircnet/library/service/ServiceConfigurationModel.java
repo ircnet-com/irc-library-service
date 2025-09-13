@@ -42,7 +42,7 @@ public class ServiceConfigurationModel implements ConfigurationModel {
 
     /**
      * It is optional. It is a subset of "dataFlags" that defines which information the service wants to receive in a
-     * "connection burst". The information is similar to a server "connection burst", it describe the current set
+     * "connection burst". The information is similar to a server "connection burst", it describes the current set
      * of the network. The service can therefore store the information in memory and update it.
      */
     private int burstFlags;
@@ -61,6 +61,11 @@ public class ServiceConfigurationModel implements ConfigurationModel {
      * The IP address the service uses to connect to an IRC server.
      */
     private String localAddress;
+
+    /**
+     * Properties for SQUERY replies.
+     */
+    private SQuery squery;
 
     @Override
     public List<IRCServerModel> getIrcServers() {
@@ -84,5 +89,11 @@ public class ServiceConfigurationModel implements ConfigurationModel {
     @Override
     public String getUserId() {
         return name;
+    }
+
+    @Data
+    public static class SQuery {
+        private String admin;
+        private String info;
     }
 }
