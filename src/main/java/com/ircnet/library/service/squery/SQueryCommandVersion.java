@@ -40,8 +40,7 @@ public class SQueryCommandVersion extends SQueryCommand<IRCConnectionService> {
     @Override
     public void processCommand(IRCServiceConnection ircServiceConnection, User from,
                                String message, Map<String, String> tags) {
-        ircConnectionService.notice(ircServiceConnection, from.getNick(), "%s v%s",
-                properties.getName(), appVersionProvider.get());
+        ircConnectionService.notice(ircServiceConnection, from.getNick(), "%s", appVersionProvider.get());
     }
 
     /**
