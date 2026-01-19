@@ -1,9 +1,10 @@
 package com.ircnet.library.service.event;
 
 import com.ircnet.library.service.connection.IRCServiceConnection;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
-public class EndOfBurstEvent extends AbstractServiceEvent {
-    public EndOfBurstEvent(IRCServiceConnection ircConnection) {
-        this.ircConnection = ircConnection;
-    }
+@Getter
+@SuperBuilder(toBuilder = true)
+public class EndOfBurstEvent extends AbstractServiceEvent<IRCServiceConnection>  {
 }

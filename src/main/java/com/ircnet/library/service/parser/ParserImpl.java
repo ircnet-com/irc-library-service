@@ -7,6 +7,7 @@ import com.ircnet.library.common.connection.ConnectionStatus;
 import com.ircnet.library.common.connection.IRCConnectionService;
 import com.ircnet.library.common.event.ConnectionStatusChangedEvent;
 import com.ircnet.library.common.event.EventBus;
+import com.ircnet.library.common.event.EventContext;
 import com.ircnet.library.common.parser.ParserMapping;
 import com.ircnet.library.service.ServiceConfigurationModel;
 import com.ircnet.library.service.connection.IRCServiceConnection;
@@ -32,32 +33,34 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
         this.ircConnectionService = ircConnectionService;
         this.eventBus = eventBus;
         this.connectionStatusChangedHandler = connectionStatusChangedHandler;
-        parserMappingList.add(new ParserMapping<>("UNICK", 1, (arg1, arg2, arg3) -> parseUNick(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("NICK", 1, (arg1, arg2, arg3) -> parseNickChange(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("NICK", 0, (arg1, arg2, arg3) -> parseNick(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("CHANNEL", 0, (arg1, arg2, arg3) -> parseChannel(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("MODE", 0, (arg1, arg2, arg3) -> parseChannelMode(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("QUIT", 1, (arg1, arg2, arg3) -> parseQuit(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("TOPIC", 0, (arg1, arg2, arg3) -> parseTopic(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("TOPIC", 1, (arg1, arg2, arg3) -> parseTopicChange(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SERVER", 1, (arg1, arg2, arg3) -> parseServer(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SQUIT", 1, (arg1, arg2, arg3) -> parseSQuit(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("EOB", 0, (arg1, arg2, arg3) -> parseEndOfBurst(arg1)));
-        parserMappingList.add(new ParserMapping<>("383", 1, (arg1, arg2, arg3) -> parseYouAreService(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("MODE", 1, (arg1, arg2, arg3) -> parseUserMode(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SQUERY", 1, (arg1, arg2, arg3) -> parseSQuery(arg1, arg2, arg3)));
-        parserMappingList.add(new ParserMapping<>("SERVSET", 1, (arg1, arg2, arg3) -> parseServSet(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("SASL", 1, (arg1, arg2, arg3) -> parseSASL(arg1, arg2)));
-        parserMappingList.add(new ParserMapping<>("481", 1, (arg1, arg2, arg3) -> parsePermissionDenied(arg1, arg2)));
+        parserMappingList.add(new ParserMapping<>("UNICK", 1, (arg1, arg2, arg3, arg4, arg5) -> parseUNick(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("NICK", 1, (arg1, arg2, arg3, arg4, arg5) -> parseNickChange(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("NICK", 0, (arg1, arg2, arg3, arg4, arg5) -> parseNick(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("CHANNEL", 0, (arg1, arg2, arg3, arg4, arg5) -> parseChannel(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("MODE", 0, (arg1, arg2, arg3, arg4, arg5) -> parseChannelMode(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("QUIT", 1, (arg1, arg2, arg3, arg4, arg5) -> parseQuit(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("TOPIC", 0, (arg1, arg2, arg3, arg4, arg5) -> parseTopic(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("TOPIC", 1, (arg1, arg2, arg3, arg4, arg5) -> parseTopicChange(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("SERVER", 1, (arg1, arg2, arg3, arg4, arg5) -> parseServer(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("SQUIT", 1, (arg1, arg2, arg3, arg4, arg5) -> parseSQuit(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("EOB", 0, (arg1, arg2, arg3, arg4, arg5) -> parseEndOfBurst(arg1, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("383", 1, (arg1, arg2, arg3, arg4, arg5) -> parseYouAreService(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("MODE", 1, (arg1, arg2, arg3, arg4, arg5) -> parseUserMode(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("SQUERY", 1, (arg1, arg2, arg3, arg4, arg5) -> parseSQuery(arg1, arg2, arg3, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("SERVSET", 1, (arg1, arg2, arg3, arg4, arg5) -> parseServSet(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("SASL", 1, (arg1, arg2, arg3, arg4, arg5) -> parseSASL(arg1, arg2, arg4, arg5)));
+        parserMappingList.add(new ParserMapping<>("481", 1, (arg1, arg2, arg3, arg4, arg5) -> parsePermissionDenied(arg1, arg2, arg4, arg5)));
     }
 
     @Override
-    public boolean parse(IRCServiceConnection ircConnection, String input) {
+    public boolean parse(IRCServiceConnection ircConnection, String input, EventContext<IRCServiceConnection> eventContext) {
         LOGGER.debug("{}", input);
-        return super.parse(ircConnection, input);
+        return super.parse(ircConnection, input, eventContext);
     }
 
-    private void parseYouAreService(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseYouAreService(IRCServiceConnection ircConnection, String[] parts,
+                                    EventContext<IRCServiceConnection> eventContext,
+                                    String line) {
         /*
             parts[0] = server (starting with ':')
             parts[1] = 383
@@ -85,12 +88,24 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
         ircConnectionService.send(ircConnection, servSetCommand.toString());
 
         connectionStatusChangedHandler.onRegistered(ircConnection);
-        eventBus.publishEvent(new YouAreServiceEvent(ircConnection, serviceName));
-        eventBus.publishEvent(new ConnectionStatusChangedEvent(ircConnection, ircConnection.getConnectionStatus(), ConnectionStatus.REGISTERED));
+
+        eventBus.publishEvent(YouAreServiceEvent.builder()
+                        .context(eventContext)
+                        .raw(line)
+                        .serviceName(serviceName)
+                .build());
+        eventBus.publishEvent(ConnectionStatusChangedEvent.<IRCServiceConnection>builder()
+                .context(eventContext)
+                .oldStatus(ircConnection.getConnectionStatus())
+                .newStatus(ConnectionStatus.REGISTERED)
+                .raw(line)
+                .build());
     }
 
 
-    private void parseServer(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseServer(IRCServiceConnection ircConnection, String[] parts,
+                             EventContext<IRCServiceConnection> eventContext,
+                             String line) {
         /*
             parts[0] = server (starting with ':')
             parts[1] = "SERVER"
@@ -99,20 +114,37 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
             parts[4] = SID of the new server
             parts[5] = service info (starting with ':')
         */
-        eventBus.publishEvent(new ServerEvent(ircConnection, parts[2], Integer.parseInt(parts[3]), parts[4], Util.removeLeadingColon(parts[5])));
+        eventBus.publishEvent(ServerEvent.builder()
+                .context(eventContext)
+                .serverName(parts[2])
+                .hopCount(Integer.parseInt(parts[3]))
+                .sid(parts[4])
+                .info(Util.removeLeadingColon(parts[5]))
+                .raw(line)
+                .build());
     }
 
-    private void parseSQuit(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseSQuit(IRCServiceConnection ircConnection, String[] parts,
+                            EventContext<IRCServiceConnection> eventContext,
+                            String line) {
         /*
             parts[0] = sender (starting with ':')
             parts[1] = "SQUIT"
             parts[2] = name of the quitting server
             parts[3] = reason
         */
-        eventBus.publishEvent(new SQuitEvent(ircConnection, Util.removeLeadingColon(parts[0]),  parts[2], Util.removeLeadingColon(parts[3])));
+        eventBus.publishEvent(SQuitEvent.builder()
+                .context(eventContext)
+                .sender(Util.removeLeadingColon(parts[0]))
+                .serverName(parts[2])
+                .reason(Util.removeLeadingColon(parts[3]))
+                .raw(line)
+                .build());
     }
 
-    private void parseUNick(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseUNick(IRCServiceConnection ircConnection, String[] parts,
+                            EventContext<IRCServiceConnection> eventContext,
+                            String line) {
         /*
             parts[0] = server (starting with ':')
             parts[1] = UNICK
@@ -128,7 +160,7 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
         String accountName;
         String realName;
 
-        if(parts.length > 9 && parts[9].charAt(0) == ':') {
+        if (parts.length > 9 && parts[9].charAt(0) == ':') {
             accountName = parts[8];
             realName = Util.removeLeadingColon(parts[9]);
         }
@@ -137,20 +169,40 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
             realName = Util.removeLeadingColon(parts[8]);
         }
 
-        eventBus.publishEvent(new UNickEvent(ircConnection, Util.removeLeadingColon(parts[0]), parts[3], parts[2],
-                parts[4], parts[5], parts[6], parts[7], accountName, realName));
+        eventBus.publishEvent(UNickEvent.builder()
+                .context(eventContext)
+                .sid(Util.removeLeadingColon(parts[0]))
+                .uid(parts[3])
+                .nick(parts[2])
+                .user(parts[4])
+                .host(parts[5])
+                .ipAddress(parts[6])
+                .userModes(parts[7])
+                .account(accountName)
+                .realName(realName)
+                .raw(line)
+                .build());
     }
 
-    private void parseNickChange(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseNickChange(IRCServiceConnection ircConnection, String[] parts,
+                                 EventContext<IRCServiceConnection> eventContext,
+                                 String line) {
         /*
          *  parts[0] = UID (starting with ':')
          *  parts[1] = NICK
          *  parts[2] = the new nick (starting with ':')
          */
-        eventBus.publishEvent(new NickChangeEvent(ircConnection, Util.removeLeadingColon(parts[0]), Util.removeLeadingColon(parts[2])));
+        eventBus.publishEvent(NickChangeEvent.builder()
+                .context(eventContext)
+                .uid(Util.removeLeadingColon(parts[0]))
+                .newNick(Util.removeLeadingColon(parts[2]))
+                .raw(line)
+                .build());
     }
 
-    private void parseNick(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseNick(IRCServiceConnection ircConnection, String[] parts,
+                           EventContext<IRCServiceConnection> eventContext,
+                           String line) {
         /*
             parts[0] = "NICK"
             parts[1] = nick
@@ -162,88 +214,156 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
             parts[7] = real name (starting with ':')
         */
         if(parts.length == 3) {
-            eventBus.publishEvent(new NickEvent(ircConnection, parts[1], Integer.parseInt(Util.removeLeadingColon(parts[2]))));
+            eventBus.publishEvent(NickEvent.builder()
+                    .nick(parts[1])
+                    .hopCount(Integer.parseInt(Util.removeLeadingColon(parts[2])))
+                    .build());
         }
         else if(parts.length == 8) {
-            eventBus.publishEvent(new NickEvent(ircConnection, parts[1], parts[3], parts[4], Util.removeLeadingColon(parts[7]), parts[5], Integer.parseInt(parts[2]), parts[6]));
+            eventBus.publishEvent(NickEvent.builder()
+                    .context(eventContext)
+                    .nick(parts[1])
+                    .user(parts[3])
+                    .host(parts[4])
+                    .realName(Util.removeLeadingColon(parts[7]))
+                    .serverName(parts[5])
+                    .hopCount(Integer.parseInt(parts[2]))
+                    .userModes(parts[6])
+                    .raw(line)
+                    .build());
         }
     }
 
-    private void parseChannel(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseChannel(IRCServiceConnection ircConnection, String[] parts,
+                              EventContext<IRCServiceConnection> eventContext,
+                              String line) {
         /*
             parts[0] = "CHANNEL"
             parts[1] = channel name
             parts[2] = user count
         */
-        eventBus.publishEvent(new ChannelEvent(ircConnection, parts[1], Integer.parseInt(parts[2])));
+        eventBus.publishEvent(ChannelEvent.builder()
+                .context(eventContext)
+                .channelName(parts[1])
+                .userCount(Integer.parseInt(parts[2]))
+                .raw(line)
+                .build());
     }
 
-    private void parseQuit(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseQuit(IRCServiceConnection ircConnection, String[] parts,
+                           EventContext<IRCServiceConnection> eventContext,
+                           String line) {
         /*
          *  parts[0] = UID (starting with ':')
          *  parts[1] = QUIT
          *  parts[2] = message (starting with ':')
          */
-        eventBus.publishEvent(new QuitEvent(ircConnection, Util.removeLeadingColon(parts[0]), Util.removeLeadingColon(parts[2])));
+        eventBus.publishEvent(QuitEvent.builder()
+                .context(eventContext)
+                .uid(Util.removeLeadingColon(parts[0]))
+                .message(Util.removeLeadingColon(parts[2]))
+                .raw(line)
+                .build());
     }
 
-    private void parseTopic(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseTopic(IRCServiceConnection ircConnection, String[] parts,
+                            EventContext<IRCServiceConnection> eventContext,
+                            String line) {
         /*
             parts[0] = "TOPIC"
             parts[1] = channel name
             parts[2] = topic (starting with ':')
         */
-        eventBus.publishEvent(new TopicEvent(ircConnection, parts[1], Util.removeLeadingColon(parts[2])));
+        eventBus.publishEvent(TopicEvent.builder()
+                .context(eventContext)
+                .channelName(parts[1])
+                .topic(Util.removeLeadingColon(parts[2]))
+                .raw(line)
+                .build());
     }
 
-    private void parseTopicChange(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseTopicChange(IRCServiceConnection ircConnection, String[] parts,
+                                  EventContext<IRCServiceConnection> eventContext,
+                                  String line) {
         /*
             parts[0] = nick (starting with ':')
             parts[1] = "TOPIC"
             parts[2] = channel name
             parts[3] = topic (starting with ':')
         */
-        eventBus.publishEvent(new TopicEvent(ircConnection, parts[2], Util.removeLeadingColon(parts[3]), Util.removeLeadingColon(parts[0])));
+        eventBus.publishEvent(TopicEvent.builder()
+                .context(eventContext)
+                .channelName(parts[2])
+                .topic(Util.removeLeadingColon(parts[3]))
+                .from(Util.removeLeadingColon(parts[0]))
+                .raw(line)
+                .build());
     }
 
-    private void parseChannelMode(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseChannelMode(IRCServiceConnection ircConnection, String[] parts,
+                                  EventContext<IRCServiceConnection> eventContext,
+                                  String line) {
         /*
             parts[0] = "CHANNEL"
             parts[1] = channel name
             parts[2] = modes
         */
-        eventBus.publishEvent(new ChannelModeEvent(ircConnection, parts[1], parts[2]));
+        eventBus.publishEvent(ChannelModeEvent.builder()
+                .channelName(parts[1])
+                .modes(parts[2])
+                .build());
     }
 
-    private void parseUserMode(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseUserMode(IRCServiceConnection ircConnection, String[] parts,
+                               EventContext<IRCServiceConnection> eventContext,
+                               String line) {
         /*
             parts[0] = nick (starting with ':')
             parts[1] = "MODE"
             parts[2] = my service name
             parts[3] = modes
        */
-        eventBus.publishEvent(new UserModeEvent(ircConnection, parts[2], parts[3]));
+        eventBus.publishEvent(UserModeEvent.builder()
+                .context(eventContext)
+                .nick(parts[2])
+                .modes(parts[3])
+                .raw(line)
+                .build());
     }
 
-    private void parseSQuery(IRCServiceConnection ircConnection, String[] parts, Map<String, String> messageTags) {
+    private void parseSQuery(IRCServiceConnection ircConnection, String[] parts, Map<String, String> messageTags,
+                             EventContext<IRCServiceConnection> eventContext,
+                             String line) {
         /*
             parts[0] = hostmask of the sender
             parts[1] = "SQUERY"
             parts[2] = my service name
             parts[3] = message
         */
-        eventBus.publishEvent(new SQueryEvent(ircConnection, messageTags, new User(parts[0]), Util.removeLeadingColon(parts[3])));
+        eventBus.publishEvent(SQueryEvent.builder()
+                .context(eventContext)
+                .messageTags(messageTags)
+                .from(new User(parts[0]))
+                .message(Util.removeLeadingColon(parts[3]))
+                .raw(line)
+                .build());
     }
 
-    private void parseEndOfBurst(IRCServiceConnection ircConnection) {
+    private void parseEndOfBurst(IRCServiceConnection ircConnection,
+                                 EventContext<IRCServiceConnection> eventContext,
+                                 String line) {
         // parts[0] = "EOB"
         LOGGER.trace("End of burst");
         ircConnection.setBurst(false);
 
-        eventBus.publishEvent(new EndOfBurstEvent(ircConnection));
+        eventBus.publishEvent(EndOfBurstEvent.builder()
+                .raw(line)
+                .build());
     }
 
-    private void parseServSet(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseServSet(IRCServiceConnection ircConnection, String[] parts,
+                              EventContext<IRCServiceConnection> eventContext,
+                              String line) {
         /*
             parts[0] = hostmask of the sender
             parts[1] = "SERVSET"
@@ -259,10 +379,15 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
             ircConnection.setBurstStart(new Date());
         }
 
-        eventBus.publishEvent(new ServSetEvent(ircConnection, new User(parts[0]), acceptedSettings));
+        eventBus.publishEvent(ServSetEvent.builder()
+                .from(new User(parts[0]))
+                .acceptedSettings(acceptedSettings)
+                .build());
     }
 
-    private void parseSASL(IRCServiceConnection ircConnection, String[] parts) {
+    private void parseSASL(IRCServiceConnection ircConnection, String[] parts,
+                           EventContext<IRCServiceConnection> eventContext,
+                           String line) {
         /*
             parts[0] = server (starting with ':')
             parts[1] = "SASL"
@@ -271,16 +396,30 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
             parts[4] = type ('H', 'S', 'C')
             parts[5] = data
         */
-        eventBus.publishEvent(new SASLEvent(ircConnection, Util.removeLeadingColon(parts[0]), parts[2], parts[4], parts[5]));
+        eventBus.publishEvent(SASLEvent.builder()
+                .context(eventContext)
+                .serverName(Util.removeLeadingColon(parts[0]))
+                .uidNick(parts[2])
+                .type(parts[4])
+                .data(parts[5])
+                .raw(line)
+                .build());
     }
 
-    private void parsePermissionDenied(IRCServiceConnection ircConnection, String[] parts) {
+    private void parsePermissionDenied(IRCServiceConnection ircConnection, String[] parts,
+                                       EventContext<IRCServiceConnection> eventContext,
+                                       String line) {
         /*
             parts[0] = server (starting with ':')
             parts[1] = "481"
             parts[2] = my service name
             parts[3] = ":Permission Denied"
         */
-        eventBus.publishEvent(new PermissionDeniedEvent(ircConnection, Util.removeLeadingColon(parts[0]), Util.removeLeadingColon(parts[3])));
+        eventBus.publishEvent(PermissionDeniedEvent.builder()
+                .context(eventContext)
+                .serverName(Util.removeLeadingColon(parts[0]))
+                .message(Util.removeLeadingColon(parts[3]))
+                .raw(line)
+                .build());
     }
 }

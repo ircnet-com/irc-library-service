@@ -2,15 +2,11 @@ package com.ircnet.library.service.event;
 
 import com.ircnet.library.service.connection.IRCServiceConnection;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-public class ChannelEvent extends AbstractServiceEvent {
+@SuperBuilder(toBuilder = true)
+public class ChannelEvent extends AbstractServiceEvent<IRCServiceConnection> {
     private String channelName;
     private int userCount;
-
-    public ChannelEvent(IRCServiceConnection ircConnection, String channelName, int userCount) {
-        this.ircConnection = ircConnection;
-        this.channelName = channelName;
-        this.userCount = userCount;
-    }
 }
