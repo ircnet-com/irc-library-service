@@ -215,8 +215,10 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
         */
         if(parts.length == 3) {
             eventBus.publishEvent(NickEvent.builder()
+                    .context(eventContext)
                     .nick(parts[1])
                     .hopCount(Integer.parseInt(Util.removeLeadingColon(parts[2])))
+                    .raw(line)
                     .build());
         }
         else if(parts.length == 8) {
@@ -309,8 +311,10 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
             parts[2] = modes
         */
         eventBus.publishEvent(ChannelModeEvent.builder()
+                .context(eventContext)
                 .channelName(parts[1])
                 .modes(parts[2])
+                .raw(line)
                 .build());
     }
 
@@ -357,6 +361,7 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
         ircConnection.setBurst(false);
 
         eventBus.publishEvent(EndOfBurstEvent.builder()
+                .context(eventContext)
                 .raw(line)
                 .build());
     }
@@ -380,8 +385,10 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
         }
 
         eventBus.publishEvent(ServSetEvent.builder()
+                .context(eventContext)
                 .from(new User(parts[0]))
                 .acceptedSettings(acceptedSettings)
+                .raw(line)
                 .build());
     }
 
