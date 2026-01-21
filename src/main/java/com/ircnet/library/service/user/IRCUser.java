@@ -37,12 +37,7 @@ public class IRCUser {
   /**
    * IP address.
    */
-  private String ipAddress;
-
-  /**
-   * IP address family (IPv4 or IPv6).
-   */
-  private IpAddressFamily ipAddressFamily;
+  private IpAddress ipAddress;
 
   /**
    * User modes.
