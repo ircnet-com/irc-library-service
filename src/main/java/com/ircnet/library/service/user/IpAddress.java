@@ -5,7 +5,7 @@ import java.util.Objects;
 public record IpAddress(IpAddressFamily family, String address) {
     public IpAddress {
         Objects.requireNonNull(family, "family must not be null");
-        address = Objects.requireNonNull(address, "address must not be null");
+        Objects.requireNonNull(address, "address must not be null");
     }
 
     public static IpAddress ipv4(String address) {
