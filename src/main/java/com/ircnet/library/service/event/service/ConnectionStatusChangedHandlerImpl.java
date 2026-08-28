@@ -29,7 +29,15 @@ public class ConnectionStatusChangedHandlerImpl extends com.ircnet.library.commo
         LOGGER.info("Connection established");
         ServiceConfigurationModel config = ((IRCServiceConnection)ircConnection).getServiceConfiguration();
         ircConnectionService.send(ircConnection, "PASS %s", ircConnection.getCurrentServer().getPassword());
-        ircConnectionService.send(ircConnection, "SERVICE %s %s %s :%s", config.getName(), config.getDistributionMask(), "0x" + Integer.toHexString(config.getType()), config.getInfo());
+        ircConnectionService.send(ircConnection, "SERVICE %s %s %s :%s", config.getName(), config.getDistributionMask(), "0x" + Long.toHexString(config.getType()), config.getInfo());
+    }
+
+    @Override
+    public void onConnectFailed(IRCConnection ircConnection) {
+        super.onConnectFailed(ircConnection);
+        LOGGER.info("Connect failed");
+        ircConnectionService.reset(ircConnection);
+        prepareDelayedReconnect(ircConnection);
     }
 
     @Override

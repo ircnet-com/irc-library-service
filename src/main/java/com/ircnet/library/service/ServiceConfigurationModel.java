@@ -25,7 +25,7 @@ public class ServiceConfigurationModel implements ConfigurationModel {
      * This is the service type as configured in the S line.
      * The service type is a bit mask which defines what information the service can see and they are allowed to do.
      */
-    private int type;
+    private long type;
 
     /**
      * It is a subset of the service type. It defines what kind of information the service wants to receive for
@@ -38,14 +38,14 @@ public class ServiceConfigurationModel implements ConfigurationModel {
      * SERVICE_WANT_EXTNICK    0x40000  user extended NICK syntax
      * SERVICE_WANT_UID        0x80000  user extended UID syntax
      */
-    private int dataFlags;
+    private long dataFlags;
 
     /**
      * It is optional. It is a subset of "dataFlags" that defines which information the service wants to receive in a
      * "connection burst". The information is similar to a server "connection burst", it describes the current set
      * of the network. The service can therefore store the information in memory and update it.
      */
-    private int burstFlags;
+    private long burstFlags;
 
     /**
      *  This is a short description of the service. It will be sent in "SERVLIST".

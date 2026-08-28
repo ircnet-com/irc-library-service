@@ -7,8 +7,10 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder(toBuilder = true)
 public class ServerEvent extends AbstractServiceEvent<IRCServiceConnection>  {
+    private String sender;
     private String serverName;
     private int hopCount;
     private String sid;
+    private String version;
     private String info;
 }

@@ -2,6 +2,9 @@ package com.ircnet.library.service.server;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a linked IRC server.
  */
@@ -18,7 +21,7 @@ public class IRCServer {
     private String name;
 
     /**
-     * hop count.
+     * Hop count.
      */
     private int hopCount;
 
@@ -26,4 +29,13 @@ public class IRCServer {
      * Info / Description.
      */
     private String info;
+
+    /**
+     * Nodes.
+     */
+    private List<IRCServer> nodes;
+
+    public IRCServer() {
+        this.nodes = new ArrayList<>();
+    }
 }

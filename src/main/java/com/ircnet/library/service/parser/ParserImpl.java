@@ -30,6 +30,7 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
     public ParserImpl(IRCConnectionService ircConnectionService,
                       EventBus eventBus,
                       ConnectionStatusChangedHandlerImpl connectionStatusChangedHandler) {
+        super(eventBus, ircConnectionService);
         this.ircConnectionService = ircConnectionService;
         this.eventBus = eventBus;
         this.connectionStatusChangedHandler = connectionStatusChangedHandler;
@@ -77,16 +78,15 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
 
         StringBuilder servSetCommand = new StringBuilder("SERVSET ");
         servSetCommand.append("0x");
-        servSetCommand.append(Integer.toHexString(config.getDataFlags()));
+        servSetCommand.append(Long.toHexString(config.getDataFlags()));
 
         if(config.getBurstFlags() != 0) {
             // Add flags for requested burst
             servSetCommand.append(" 0x");
-            servSetCommand.append(Integer.toHexString(config.getBurstFlags()));
+            servSetCommand.append(Long.toHexString(config.getBurstFlags()));
         }
 
         ircConnectionService.send(ircConnection, servSetCommand.toString());
-
         connectionStatusChangedHandler.onRegistered(ircConnection);
 
         eventBus.publishEvent(YouAreServiceEvent.builder()
@@ -102,26 +102,53 @@ public class ParserImpl extends com.ircnet.library.common.parser.ParserImpl<IRCS
                 .build());
     }
 
-
     private void parseServer(IRCServiceConnection ircConnection, String[] parts,
                              EventContext<IRCServiceConnection> eventContext,
                              String line) {
-        /*
-            parts[0] = server (starting with ':')
-            parts[1] = "SERVER"
-            parts[2] = name of the new server
-            parts[3] = hop count
-            parts[4] = SID of the new server
-            parts[5] = service info (starting with ':')
-        */
-        eventBus.publishEvent(ServerEvent.builder()
+        if(parts.length == 7) {
+            /*
+                parts[0] = server (starting with ':')
+                parts[1] = "SERVER"
+                parts[2] = name of the new server
+                parts[3] = hop count
+                parts[4] = SID of the new server
+                parts[5] = version of the new server
+                parts[6] = service info (starting with ':')
+            */
+            eventBus.publishEvent(ServerEvent.builder()
                 .context(eventContext)
+                .sender(Util.removeLeadingColon(parts[0]))
                 .serverName(parts[2])
                 .hopCount(Integer.parseInt(parts[3]))
                 .sid(parts[4])
+                .version(parts[5])
+                .info(Util.removeLeadingColon(parts[6]))
+                .raw(line)
+                .build());
+        }
+        else {
+            // Old SERVER message
+
+            /*
+                parts[0] = server (starting with ':')
+                parts[1] = "SERVER"
+                parts[2] = name of the new server
+                parts[3] = hop count
+                parts[4] = SID of the new server
+                parts[5] = version of the new server
+                parts[6] = service info (starting with ':')
+            */
+            eventBus.publishEvent(ServerEvent.builder()
+                .context(eventContext)
+                .sender(Util.removeLeadingColon(parts[0]))
+                .serverName(parts[2])
+                .hopCount(Integer.parseInt(parts[3]))
+                .sid(parts[4])
+                .version("")
                 .info(Util.removeLeadingColon(parts[5]))
                 .raw(line)
                 .build());
+        }
     }
 
     private void parseSQuit(IRCServiceConnection ircConnection, String[] parts,
